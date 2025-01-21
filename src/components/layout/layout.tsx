@@ -16,7 +16,7 @@ export default function Layout() {
         <link rel="icon" type="image/png" href="/public/favicon.ico" />
       </Helmet>
 
-      <main className="h-full min-h-screen w-full flex flex-col ">
+      <main className="min-h-screen m-0 flex flex-col">
         <Navbar />
         <div className="h-full w-full">
           <Outlet />

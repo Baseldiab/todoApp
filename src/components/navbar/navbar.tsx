@@ -7,13 +7,13 @@ import ThemeToggle from "@/components/navbar/theme_toggle";
 import MainLogoIcon from "@/components/icons/MainLogoIcon";
 
 // hooks
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@/components/provideres/theme-provider";
 
 export default function Navbar() {
   const { theme } = useTheme();
   return (
-    <nav className=" sticky sm:top-8 top-5 left-0 right-0  z-50 ">
-      <div className="flex justify-between items-center container py-4 sm:px-8 px-6 bg-theme-background-main dark:bg-theme-background-dark rounded-full shadow-2xl border border-grey-200 dark:border-grey-200">
+    <nav className="my-10">
+      <div className="flex justify-between items-center container py-4 sm:px-8 px-6 bg-theme-background-main dark:bg-theme-background-dark rounded-full  border border-grey-200 dark:border-grey-200">
         <Link to={"/"}>
           {theme === "light" ? (
             <MainLogoIcon fill="#000" className="md:w-48 w-40" />

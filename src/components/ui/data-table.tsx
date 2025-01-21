@@ -130,7 +130,7 @@ export function DataTable<TData, TValue>({
                 colSpan={columns.length + (subTable ? 1 : 0)}
                 className="h-24 text-center"
               >
-                No results
+                No Users Found
               </TableCell>
             </TableRow>
           )}

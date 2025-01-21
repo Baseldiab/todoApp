@@ -17,19 +17,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -97,4 +84,8 @@
 
 .container {
   @apply xl:w-[90%] max-w-[1300px]  sm:w-[85%] w-[90%] !mx-auto;
+}
+
+.body {
+  @apply !text-black dark:text-white;
 }
