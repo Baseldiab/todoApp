@@ -15,7 +15,7 @@ const AppRouter = () => {
       errorElement: <ErrorElement />,
       children: [
         {
-          index: true,
+          path: "",
           element: <HomePage />,
         },
 

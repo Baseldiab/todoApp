@@ -1,22 +1,25 @@
 import { Helmet } from "react-helmet-async";
 import { Outlet } from "react-router-dom";
 
+// components
+import Navbar from "@/components/navbar/navbar";
+
 export default function Layout() {
   return (
     <>
       <Helmet>
-        <title>Modern React App</title>
+        <title>Todo App</title>
         <meta
           name="description"
-          content="A modern React application with TypeScript, Tailwind CSS, and more"
+          content="A modern React application with  TypeScript, Tailwind CSS, and more"
         />
+        <link rel="icon" type="image/png" href="/public/favicon.ico" />
       </Helmet>
 
-      <main>
-        <div className="h-screen flex">
-          <div className="flex gap-0 min-h-full w-full">
-            <Outlet />
-          </div>
+      <main className="h-full min-h-screen w-full flex flex-col ">
+        <Navbar />
+        <div className="h-full w-full">
+          <Outlet />
         </div>
       </main>
     </>
