@@ -1,24 +1,21 @@
 import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 // lib imports
 import { ColumnDef } from "@tanstack/react-table";
 
 // asset imports
-import { PencilIcon, PlusIcon } from "lucide-react";
+import { Loader2, PencilIcon } from "lucide-react";
 import { Trash2 } from "lucide-react";
 
-// types
+// api
 import { User } from "@/api/types/user";
+import { deleteUser, getAllUsers } from "@/api/routes/user";
 
 // Ui imports
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
-
-// components dialogs
-import ConfirmDeleteDialog from "@/components/dialogs/confirmDeleteDialog";
-import { useQuery } from "@tanstack/react-query";
-import { getAllUsers } from "@/api/routes/user";
-import Loading from "@/components/common/loading";
 import {
   Pagination,
   PaginationContent,
@@ -28,16 +25,49 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+// components dialogs
+import ConfirmDeleteDialog from "@/components/dialogs/confirmDeleteDialog";
+import Loading from "@/components/common/loading";
+import { useToast } from "@/hooks/use-toast";
+
 export default function UsersTable() {
+  const queryClient = useQueryClient();
+
+  const { toast } = useToast();
+
   // state
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 5;
+  const [itemId, setItemId] = React.useState<string | number | null>(null);
 
   // Queries
   const { data: allUsers, isLoading: isUsersLoading } = useQuery({
     queryKey: ["users"],
     queryFn: () => getAllUsers(),
+  });
+
+  const deleteUserMutation = useMutation({
+    mutationFn: (id: string | number) => deleteUser(id),
+    onSuccess: () => {
+      queryClient.setQueryData(["users"], (oldData: User[] | undefined) => {
+        if (oldData) {
+          return oldData.filter((user) => user.id !== itemId);
+        }
+        return [];
+      });
+
+      toast({
+        title: "User deleted successfully",
+        variant: "default",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error deleting user",
+        variant: "destructive",
+      });
+    },
   });
 
   // Calculate pagination
@@ -48,6 +78,7 @@ export default function UsersTable() {
     return allUsers.slice(startIndex, endIndex);
   }, [allUsers, currentPage]);
 
+  // table columns
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: "_id",
@@ -61,7 +92,9 @@ export default function UsersTable() {
       header: () => <p className="text-start">Name</p>,
       cell: ({ row }) => {
         return (
-          <div className="text-start font-medium ">{row.original.name}</div>
+          <div className="text-start font-medium ">
+            {row.original.name ? row.original.name : "Not found"}
+          </div>
         );
       },
     },
@@ -69,14 +102,22 @@ export default function UsersTable() {
       accessorKey: "email",
       header: () => <p className="text-start">Email</p>,
       cell: ({ row }) => {
-        return <p className="text-start font-medium ">{row.original.email}</p>;
+        return (
+          <p className="text-start font-medium ">
+            {row.original.email ? row.original.email : "Not found"}
+          </p>
+        );
       },
     },
     {
       accessorKey: "phone",
       header: () => <p className="text-start">Phone</p>,
       cell: ({ row }) => {
-        return <p className="text-start font-medium ">{row.original.phone}</p>;
+        return (
+          <p className="text-start font-medium ">
+            {row.original.phone ? row.original.phone : "Not found"}
+          </p>
+        );
       },
     },
     {
@@ -84,7 +125,9 @@ export default function UsersTable() {
       header: () => <p className="text-start">Address</p>,
       cell: ({ row }) => {
         return (
-          <p className="text-start font-medium ">{row.original.address.city}</p>
+          <p className="text-start font-medium ">
+            {row.original.address ? row.original.address.city : "Not found"}
+          </p>
         );
       },
     },
@@ -98,20 +141,27 @@ export default function UsersTable() {
             <Button
               title="Edit"
               onClick={() => {
-                console.log(row.original);
+                handleUpdateUser(row.original);
               }}
+              disabled={deleteUserMutation.isPending}
               className="flex items-center font-medium select-none gap-2 h-[44px] w-fit border border-theme-separator bg-transparent text-yellow-500 hover:bg-yellow-500 hover:text-white"
             >
               <PencilIcon className="size-5 -mb-1 min-w-4 min-h-4" />
             </Button>
             <Button
               title="Delete"
+              disabled={deleteUserMutation.isPending}
               onClick={() => {
-                console.log(row.original);
+                setItemId(row.original.id);
+                setIsDeleteDialogOpen(true);
               }}
               className="flex items-center font-medium select-none gap-2 h-[44px] w-fit border bg-transparent hover:bg-red-500 hover:text-white text-red-500"
             >
-              <Trash2 className="size-4 -mb-1 min-w-4 min-h-4" />
+              {deleteUserMutation.isPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Trash2 className="size-4 -mb-1 min-w-4 min-h-4" />
+              )}
             </Button>
           </div>
         );
@@ -121,6 +171,14 @@ export default function UsersTable() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleUpdateUser = (user: User) => {
+    queryClient.setQueryData(["user-item"], user);
+  };
+
+  const handleDeleteUser = (id: string | number) => {
+    deleteUserMutation.mutate(id);
   };
 
   if (isUsersLoading || !allUsers) {
@@ -133,15 +191,6 @@ export default function UsersTable() {
     <div className="w-full bg-transparent rounded-3xl p-6 flex flex-col gap-6 container">
       <div className="flex items-center gap-6 w-full justify-between">
         <h1 className="font-bold font-sans -mt-2 text-2xl">All Users</h1>
-        <Button
-          onClick={() => {
-            console.log("add");
-          }}
-          className="flex items-center font-medium select-none gap-2 h-[44px] w-[170px] bg-blue-500 hover:bg-blue-600 dark:bg-white dark:hover:bg-white/50"
-        >
-          <PlusIcon className="size-4 -mb-1 min-w-4 min-h-4" />
-          Add New User
-        </Button>
       </div>
 
       <DataTable
@@ -194,9 +243,15 @@ export default function UsersTable() {
 
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <ConfirmDeleteDialog
-          handleDelete={() => {}}
-          onCloseModal={() => {}}
-          isLoading={false}
+          handleDelete={() => {
+            if (itemId) {
+              handleDeleteUser(itemId);
+            }
+          }}
+          onCloseModal={() => {
+            setIsDeleteDialogOpen(false);
+          }}
+          isLoading={deleteUserMutation.isPending}
           title={"Are you sure you want to delete this user?"}
           description={"This action cannot be undone."}
         />

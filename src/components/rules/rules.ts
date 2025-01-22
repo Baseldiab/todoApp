@@ -30,10 +30,9 @@ export const loginSchema = z.object({
 
   export const userSchema = z.object({
     name: z.string().min(3, "Name is required"),
-    phone: z.string().regex(/^\d{10}$/, "Invalid phone number format"),
+    phone: z.string().regex(/^\d{11}$/, "Invalid phone number format"),
     email: z.string().email("Invalid email address"),
-    date_of_birth: z.string().min(1, "Date of birth is required"),
-    address: z.string().min(1, "Address is required"),
+   
   });
   
   export type UserModel = z.infer<typeof userSchema>;

@@ -1,4 +1,3 @@
-
 export interface UsersParams {
   page?: number;
   limit?: number;

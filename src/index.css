@@ -89,3 +89,26 @@
 .body {
   @apply !text-black dark:text-white;
 }
+
+/* scrollbar */
+*::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background-color: #dfe9eb !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #3b82f6 !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #3b82f6 !important;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #1f71aa !important;
+}
