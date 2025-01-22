@@ -35,7 +35,7 @@ function FilterUsers() {
   );
 
   return (
-    <div className="flex gap-4 flex-1 min-w-[200px] self-start max-w-[400px] relative">
+    <div className="flex gap-4 flex-1 min-w-[200px] self-start md:max-w-[400px] relative max-md:!w-full">
       <Select onValueChange={handleSort}>
         <SelectTrigger className="flex-1 h-[44px]">
           <SelectValue placeholder="Sort by Name or Email" />

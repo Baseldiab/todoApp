@@ -55,7 +55,7 @@ function Search() {
   }, [queryClient]);
 
   return (
-    <div className="flex-1 min-w-[200px] self-start max-w-[400px] relative">
+    <div className="flex-1 min-w-[200px] self-start md:max-w-[400px] relative max-md:!w-full">
       <Input
         value={searchValue}
         onChange={handleSearch}

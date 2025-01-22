@@ -192,15 +192,17 @@ export default function UsersTable() {
   const totalPages = Math.ceil(allUsers.length / itemsPerPage);
 
   return (
-    <div className="w-full bg-transparent rounded-3xl p-6 flex flex-col gap-6 container">
-      <div className="flex items-center gap-6 w-full justify-between">
-        <h1 className="font-bold font-sans -mt-2 text-2xl">All Users</h1>
+    <section className="w-full bg-transparent rounded-3xl p-6 flex flex-col gap-6 container">
+      <article className="flex max-md:flex-col max-md:items-start items-center gap-6 !w-full justify-between">
+        <h1 className="font-bold font-sans -mt-2 text-2xl max-md:w-full">
+          All Users
+        </h1>
 
-        <div className="flex flex-1 justify-end items-center gap-4">
+        <div className="flex max-md:!w-full max-md:flex-col max-md:items-start md:flex-1 justify-end items-center gap-4">
           <FilterUsers />
           <SearchUser />
         </div>
-      </div>
+      </article>
 
       <DataTable
         columns={columns}
@@ -265,6 +267,6 @@ export default function UsersTable() {
           description={"This action cannot be undone."}
         />
       </Dialog>
-    </div>
+    </section>
   );
 }

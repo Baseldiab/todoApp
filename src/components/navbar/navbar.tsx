@@ -12,7 +12,7 @@ import { useTheme } from "@/components/provideres/theme-provider";
 export default function Navbar() {
   const { theme } = useTheme();
   return (
-    <nav className="my-10">
+    <nav className="my-4">
       <div className="flex justify-between items-center container py-4 sm:px-8 px-6 bg-theme-background-main dark:bg-theme-background-dark rounded-full  border border-grey-200 dark:border-grey-200">
         <Link to={"/"}>
           {theme === "light" ? (

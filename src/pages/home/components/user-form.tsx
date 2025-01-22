@@ -136,7 +136,7 @@ export default function UserForm() {
   };
 
   return (
-    <section className="w-full bg-transparent rounded-3xl p-6 flex flex-col gap-6 container">
+    <section className="w-full bg-transparent  md:p-6 py-2 flex flex-col gap-6 container">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
