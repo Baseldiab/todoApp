@@ -52,7 +52,7 @@ export default function UserForm() {
       form.setValue("phone", item.phone);
       form.setValue("email", item.email);
     }
-  }, [item]);
+  }, [item, form]);
 
   // Add User mutation
   const addUserMutation = useMutation({
@@ -69,13 +69,13 @@ export default function UserForm() {
       toast({
         title: "User added successfully",
         description: "The user has been added to the database",
-        variant: "default",
+        variant: "success",
       });
     },
-    onError: (error) => {
+    onError: (error: string) => {
       toast({
         title: "Error adding user",
-        description: error.message ?? "Something went wrong",
+        description: error ?? "Something went wrong",
         variant: "destructive",
       });
     },
@@ -97,15 +97,13 @@ export default function UserForm() {
       resetItem();
       toast({
         title: "User updated successfully",
-        description: "The user has been updated in the database",
-        variant: "default",
+        variant: "success",
       });
     },
-    onError: (error) => {
-      console.error("Error updating user:", error);
+    onError: (error: string) => {
       toast({
         title: "Error updating user",
-        description: error.message ?? "Something went wrong",
+        description: error ?? "Something went wrong",
         variant: "destructive",
       });
     },
@@ -197,10 +195,9 @@ export default function UserForm() {
               className="!h-[44px] lg:w-[170px] bg-blue-500 hover:bg-blue-600 dark:bg-white dark:hover:bg-white/50 w-full flex items-center justify-center"
             >
               Save
-              {addUserMutation.isPending ||
-                (updateUserMutation.isPending && (
-                  <Loader2 className="size-4 animate-spin" />
-                ))}
+              {(addUserMutation.isPending || updateUserMutation.isPending) && (
+                <Loader2 className="size-4 animate-spin" />
+              )}
             </Button>
             <Button
               type="button"

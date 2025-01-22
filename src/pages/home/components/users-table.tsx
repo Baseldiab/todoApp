@@ -59,12 +59,14 @@ export default function UsersTable() {
 
       toast({
         title: "User deleted successfully",
-        variant: "default",
+        variant: "success",
       });
+      setIsDeleteDialogOpen(false);
     },
-    onError: () => {
+    onError: (error: string) => {
       toast({
         title: "Error deleting user",
+        description: error ?? "Something went wrong",
         variant: "destructive",
       });
     },
@@ -144,7 +146,7 @@ export default function UsersTable() {
                 handleUpdateUser(row.original);
               }}
               disabled={deleteUserMutation.isPending}
-              className="flex items-center font-medium select-none gap-2 h-[44px] w-fit border border-theme-separator bg-transparent text-yellow-500 hover:bg-yellow-500 hover:text-white"
+              className="flex items-center font-medium select-none gap-2 border border-theme-separator bg-transparent text-yellow-500 hover:bg-yellow-500 hover:text-white"
             >
               <PencilIcon className="size-5 -mb-1 min-w-4 min-h-4" />
             </Button>
@@ -155,7 +157,7 @@ export default function UsersTable() {
                 setItemId(row.original.id);
                 setIsDeleteDialogOpen(true);
               }}
-              className="flex items-center font-medium select-none gap-2 h-[44px] w-fit border bg-transparent hover:bg-red-500 hover:text-white text-red-500"
+              className="flex items-center font-medium select-none gap-2 border bg-transparent hover:bg-red-500 hover:text-white text-red-500"
             >
               {deleteUserMutation.isPending ? (
                 <Loader2 className="size-4 animate-spin" />
