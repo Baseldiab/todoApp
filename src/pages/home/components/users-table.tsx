@@ -29,6 +29,8 @@ import {
 import ConfirmDeleteDialog from "@/components/dialogs/confirmDeleteDialog";
 import Loading from "@/components/common/loading";
 import { useToast } from "@/hooks/use-toast";
+import SearchUser from "./search-user";
+import FilterUsers from "./filter-users";
 
 export default function UsersTable() {
   const queryClient = useQueryClient();
@@ -193,6 +195,11 @@ export default function UsersTable() {
     <div className="w-full bg-transparent rounded-3xl p-6 flex flex-col gap-6 container">
       <div className="flex items-center gap-6 w-full justify-between">
         <h1 className="font-bold font-sans -mt-2 text-2xl">All Users</h1>
+
+        <div className="flex flex-1 justify-end items-center gap-4">
+          <FilterUsers />
+          <SearchUser />
+        </div>
       </div>
 
       <DataTable
